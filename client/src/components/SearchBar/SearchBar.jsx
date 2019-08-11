@@ -7,12 +7,13 @@ import Col from "react-bootstrap/Col";
 import SearchModal from "../../components/SearchModal/SearchModal";
 import { connect } from "react-redux";
 import { getSearchAction } from "../../actions";
-
+import "./SearchBar.css";
 
 function SearchBar(props){
   const [state, setState] = useState({
     search: "",
-    modalShow: false
+    modalShow: false,
+    clickedRadio: "trainer"
   });
 
   let searchInput = (e) => {
@@ -27,6 +28,7 @@ function SearchBar(props){
   // create hideModal function and set the state to false
   let hideModal = () => {
     setState({
+      ...state,
         modalShow: false
     })
   }
@@ -35,11 +37,18 @@ function SearchBar(props){
   let showModal = () => {
       console.log("STATE", state);
       setState({
+        ...state,
           modalShow: true
       })
   }
 
- 
+  let searchTypeRadioClicked = (e) => {
+    console.log("Clicked radio!!!!", e.target.value);
+    setState({
+      ...state,
+      clickedRadio: e.target.value
+    })
+  }
 
 
     return (
@@ -62,11 +71,21 @@ function SearchBar(props){
                 <Button 
                   onClick={() => {
                     showModal();
-                    props.search(state.search);
+                    props.search(state.search, state.clickedRadio);
                   }}
                   variant="outline-success"
                   >Search
                 </Button>
+                <span className="checkbox"> 
+                  {state.clickedRadio == "trainer" ?
+                      <span><input type="radio" name="search" value="trainer" checked onClick={searchTypeRadioClicked}/>Trainer<br/></span> :
+                      <span><input type="radio" name="search" value="trainer" onClick={searchTypeRadioClicked}/>Trainer<br/></span> 
+                  }
+                  {state.clickedRadio == "pokemon" ?
+                      <span><input type="radio" name="search" value="pokemon" checked onClick={searchTypeRadioClicked}/>Pokemon<br/></span> :
+                      <span><input type="radio" name="search" value="pokemon" onClick={searchTypeRadioClicked}/>Pokemon<br/></span> 
+                  }
+                </span>
                 <SearchModal
                   onHide={() => hideModal()}
                   show= {state.modalShow}
@@ -83,9 +102,9 @@ function SearchBar(props){
 
 const mapDispatchtoProps = (dispatch) => {
   return {
-    search: (data) => {
+    search: (data, checkedSearch) => {
       console.log("SEARCHING TRAINERS/POKEMON", data);
-      let action = getSearchAction(data);
+      let action = getSearchAction(data, checkedSearch);
       dispatch(action);
     }
   }

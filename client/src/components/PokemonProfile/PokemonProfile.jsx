@@ -7,7 +7,7 @@ import "./style.css";
 import ListGroup from "react-bootstrap/ListGroup"
 import DeletePokemonButton from "../../components/DeletePokemonButton/DeletePokemonButton";
 
-function pokemonProfile(props) {
+function PokemonProfile(props) {
     
     return(
         <div>
@@ -20,11 +20,13 @@ function pokemonProfile(props) {
                                     <ListGroup.Item>Pokemon: {props.pokemonName}</ListGroup.Item>
                                     <ListGroup.Item>Type: {props.type}</ListGroup.Item>
                                     <ListGroup.Item>Move: {props.move}</ListGroup.Item> 
-                                    <DeletePokemonButton 
-                                        className="deleteButton"
-                                        id={props.id}
-                                        name={props.name}
-                                    ></DeletePokemonButton>
+                                    {props.hideDelete ? null : 
+                                        <DeletePokemonButton 
+                                            className="deleteButton"
+                                            id={props.id}
+                                            name={props.name}
+                                        ></DeletePokemonButton> 
+                                    }
                                 </ListGroup>
                             </span>
                         <Row>
@@ -40,4 +42,4 @@ function pokemonProfile(props) {
 
 
 
-export default pokemonProfile;
+export default PokemonProfile;

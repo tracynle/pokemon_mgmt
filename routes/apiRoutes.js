@@ -99,7 +99,6 @@ module.exports = function(app) {
 
   // GET all Pokemon (READ) from the Trainer
   app.get("/api/:trainer/pokemons", async function(req, res) {
-    req.query.accessMeHere // "shoes"
     console.log("Get Request for Trainer:", req.params.trainer);
     res.header("Access-Control-Allow-Origin", "*");
     // find one trainer by name
@@ -174,10 +173,12 @@ module.exports = function(app) {
   });
 
   // -------------- Search Routes by Trainer and Pokemon Name --------------------
-  app.get("/api/search", async function(req, res) {
-    console.log("Search term: ", req.query.q);
-    res.header("Access-Control-Allow-Origin", "*");
+  // search returns a list of trainers based on name or the pokemon
+  // search for trainer's pokemon
+  // return a list of trainers and pokemon
 
+  // to get pokemons, access pokmeon_owned table from Trainer's table 
+  let searchTrainersByName = async (req, res) => {
     let promise = db.Trainer.findAll({
       where: {
         name: {
@@ -187,10 +188,92 @@ module.exports = function(app) {
     });
 
     let trainers = await promise; 
+    // stored in an array otherwise the iteration for pokemons and trainers will be lost
+    let pokemonAndTrainers = [];
 
-    res.json(trainers); 
+    // loop through trainers array to find their pokemon
+    for (let i= 0; i < trainers.length; i++) {
+      let trainer = trainers[i];
+      let pokemonList = trainer.pokemon_owned;
+      
+
+      if (pokemonList) {
+        let pokemonsPromise = db.Pokemon.findAll({
+          where: {
+            ID: pokemonList.split(",")       
+          }
+        });
+
+        let pokemons = await pokemonsPromise;
+        // storing the array of pokemons in new key called 'pokemons'
+        console.log("TRAINNER SEARCHED" , trainer);
+        // using sequelize, we use dataValues in order to modify the key under 'pokemons' which is an array
+        trainer.dataValues.pokemons = pokemons;
+        pokemonAndTrainers.push(trainer);
+      }
+
+    }
+
+      res.json(pokemonAndTrainers);
+  }
+
+  let searchTrainersByPokemonName = async (req, res) => {
+    // search pokemon by name from pokemon table
+    // search results returns a list of trainers with the same named pokemon
+   let pokemonPromise = db.Pokemon.findAll({
+      where: {
+        name: {      
+          $like: "%" + req.query.q + "%"
+        }
+      }
+    });
+
+    let pokemonArray = await pokemonPromise;
+    // map through the pokemonArray to their Id 
+    let pokemonsIdArray = pokemonArray.map(pokemon => {
+      return pokemon.id
+    });
+
+    let savedTrainers = [];
+    let savedTrainerNames = [];
+
+    for (i = 0; i < pokemonsIdArray.length; i++) {
+      // getting the pokemon's id at the index
+      let id = pokemonsIdArray[i];
+
+      let queryPromise = db.sequelize.query("SELECT * FROM Trainer WHERE FIND_IN_SET('" + id + "', Pokemon_owned)", {
+        type: db.sequelize.QueryTypes.SELECT,
+        model: db.Trainer
+      });
+      
+      //trainers is an array
+      let trainers = await queryPromise; // there is at max only 1 trainer in the array [trainer1]
+      let theOneTrainer = trainers[0]; // the one trainer has to be at index 0
+      theOneTrainer.dataValues.pokemons = [];
+
+      if (savedTrainerNames.indexOf(theOneTrainer.name) === -1) {
+          savedTrainers.push(theOneTrainer);
+          savedTrainerNames.push(theOneTrainer.name);
+      }
+    }
+
+    res.json(savedTrainers);
+  }
+
+  // search term based on which radio button was clicked
+  app.get("/api/search", async function(req, res) {
+    console.log("Search term: ", req.query.q);
+    console.log("CHECKEDDDDD", req.query.checked);
+    res.header("Access-Control-Allow-Origin", "*");
+
+    // if user clicks either radio button, do search by category
+    if (req.query.checked == "trainer") {
+      searchTrainersByName(req, res);
+    } else {
+      searchTrainersByPokemonName(req, res);
+    }
+
   })
- 
 
 
 };

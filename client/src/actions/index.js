@@ -121,16 +121,16 @@ export const getDeletePokemonAction = (id, trainerName) => {
         });
     };
 }
-// .........?accessMeHere=shoes
-export const getSearchAction = (searchTerms) => {
+export const getSearchAction = (searchTerms, checkedSearch) => {
     console.log("SEARCHINGGGGG", searchTerms);
 
     return async (dispatch, getState) => {
-        let promise = fetch("http://localhost:3001/api/search?q=" + searchTerms, {
+        let promise = fetch("http://localhost:3001/api/search?checked=" + checkedSearch + "&q=" + searchTerms, {
             method: "GET",
         });
         let response = await promise;
         let results = await response.json();
+
         dispatch({
             type: 'SEARCH',
             results: results
