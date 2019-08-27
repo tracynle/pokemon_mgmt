@@ -59,6 +59,36 @@ export const addTrainer = (data) => {
     }
 }
 
+ // connect API to dispatch name to be saved 
+        // dispatch editedTrainer name
+        // make API call to db
+        // specify WHERE and pass data to API 
+        // make PUT request (updating)
+        // id or prev.name that you want to save
+        // in routes, edit routes to have app.put
+export const saveName = (name, oldName) => {
+    console.log("SAVE NAME ACTIONS", name);
+    return async (dispatch, getState) => {
+       let promise = fetch("http://localhost:3001/api/saveName", {
+           method: "PUT",
+           headers: {
+            'Content-Type': 'application/json',
+           },
+           body: JSON.stringify({
+               editedName: name,
+               name: oldName
+            })
+       });
+       let response = await promise;
+       let trainer = await response.json();
+
+       dispatch ({
+           type: "SAVE NAME",
+           name:  trainer
+       })
+    }
+}
+
 export const getDeleteTrainerAction = (name) => {
     return async (dispatch, getState) => { // returns an action function
         let promise = fetch("http://localhost:3001/api/deletetrainer/?name=" + name, {
@@ -79,6 +109,9 @@ export const searchTrainer = (data) => {
         data: data
     };
 }
+
+
+
 
 // ===== POKEMON ACTIONS ==========
 

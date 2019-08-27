@@ -23,21 +23,6 @@ function TrainerForm(props) {
           <Form.Label>Name</Form.Label>
           <Form.Control onChange={nameInput} type="text" placeholder="Enter name" />
         </Form.Group>
-    
-        {/* <Form.Group controlId="formBasic">
-          <Form.Label>Pokemon</Form.Label>
-          <Form.Control type="text" placeholder="Pokemon name" />
-        </Form.Group>
-        
-        <Form.Group controlId="formBasic">
-          <Form.Label>Type</Form.Label>
-          <Form.Control type="text" placeholder="Enter type" />
-        </Form.Group>
-
-        <Form.Group controlId="formBasic">
-          <Form.Label>Move</Form.Label>
-          <Form.Control type="text" placeholder="Enter moves" />
-        </Form.Group> */}
 
         <Button 
           variant="primary" 

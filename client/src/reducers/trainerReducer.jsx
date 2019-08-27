@@ -41,9 +41,12 @@ const trainerReducer = (state = initialState, action) => {
             console.log(newState);
             return newState;
         
+        case "SAVE NAME":
+            console.log("Save trainer name reducer", action.name)
+            trainersCopy = {...state.trainers}
+            return newState;
 
-
-        case "TRAINER DELETED": // used to be "DELETE TRAINER"
+        case "TRAINER DELETED": 
             console.log("Case DELETE TRAINER", action.name);
             console.log("Delete Trainer state", state);
             

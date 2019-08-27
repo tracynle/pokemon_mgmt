@@ -33,6 +33,25 @@ module.exports = function(app) {
     });
   });
 
+  // PUT (UPDATE) trainer's name > changed in db
+  app.put("api/saveName", function(req, res) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Content-Type");
+    console.log("REQQQQQ", req.body);
+    if (!req.body.name) {
+      res.json({});
+      return;
+    }
+    db.Trainer.update({
+      name: req.body.name
+    }).then(function(dbTrainer){
+      console.log("***** SAVED trainer name ***** : ", dbTrainer.dataValues);
+      res.json(dbTrainer);
+    }) 
+
+    
+  })
+
   // ALLOW preflight requests from the browser (where method type is OPTIONS)
   app.options("/api/trainer", function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Content-Type");
@@ -240,14 +259,19 @@ module.exports = function(app) {
     for (i = 0; i < pokemonsIdArray.length; i++) {
       // getting the pokemon's id at the index
       let id = pokemonsIdArray[i];
-
+      console.log("Pokemon ID !!", id);
       let queryPromise = db.sequelize.query("SELECT * FROM Trainer WHERE FIND_IN_SET('" + id + "', Pokemon_owned)", {
         type: db.sequelize.QueryTypes.SELECT,
         model: db.Trainer
       });
       
+      
       //trainers is an array
       let trainers = await queryPromise; // there is at max only 1 trainer in the array [trainer1]
+      if (trainers.length == 0) {
+        continue;
+      }
+
       let theOneTrainer = trainers[0]; // the one trainer has to be at index 0
       theOneTrainer.dataValues.pokemons = [];
 

@@ -8,6 +8,7 @@ import Container from 'react-bootstrap/Container';
 import TrainerProfile from './components/TrainerProfile/TrainerProfile';
 import { getTrainersAction } from "./actions";
 import { connect } from 'react-redux';
+import Footer from './components/Footer/Footer';
 
 function App(props) {
   // This replaces componentDidMount (that was in the class but we're using function)
@@ -15,9 +16,6 @@ function App(props) {
     props.dispatchFetchTrainers();
   }
   useEffect(callbackFunctionAfterMounted, []);
-
-  console.log("ZZZZZZ");
-  console.log(props);
   // Map the trainer's data from db
   let getTrainerProfile = Object.values(props.trainers).map(trainer => {
     return (
@@ -48,6 +46,7 @@ function App(props) {
             {getTrainerProfile}
           </Col></Row>
       </Container>
+      <Footer></Footer>
     </div>
   );
   
