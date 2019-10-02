@@ -19,7 +19,7 @@ function TrainerProfile(props) {
     });
 
     let editTrainerName = () => {
-        // create a function on click 
+        // create a function on click to edit trainer's name
         if (state.editTrainer == true) {
             setState({
                 ...state,
@@ -37,9 +37,8 @@ function TrainerProfile(props) {
     let saveTrainersName = (event) => {
         setState({
             ...state,
-            editedName: event.target.value
+            newName: event.target.value
         })
-        props.saveName(event.target.value, props.name);
         
         // by saving the name, it needs to be saved and changed from the db
         // once name has been changed, dispatch
@@ -54,6 +53,7 @@ function TrainerProfile(props) {
                 ...state,
                 editTrainer: false
             })
+            props.saveName(event.target.value, props.name);
         }
     }
     
@@ -137,9 +137,9 @@ const mapStateToProps = (state, ownProps) => {
 // in actions, connect to API to dispatch name change
 const mapDispatchToprops = (dispatch) => {
     return {
-        saveName: (name, oldName) => {
-            console.log("SAVED EDITED TRAINER NAME: ", name);
-            dispatch(saveName(name, oldName));
+        saveName: (newName, oldName) => {
+            console.log("SAVED EDITED TRAINER NAME: ", newName);
+            dispatch(saveName(newName, oldName));
         }
     }
 }
@@ -148,7 +148,8 @@ export default connect(mapStateToProps, mapDispatchToprops)(TrainerProfile);
 //TO DO FOR DISPATCH: 
     // connect API to dispatch name to be saved 
     // dispatch editedTrainer name
-    // make API call to db
-    // specify WHERE and pass data to API 
-    // make PUT request (updating)
     // id or prev.name that you want to save 
+    // API Routes
+        // make API call to db
+        // specify WHERE and pass data to API 
+        // make PUT request (updating)

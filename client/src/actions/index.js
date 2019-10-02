@@ -66,26 +66,28 @@ export const addTrainer = (data) => {
         // make PUT request (updating)
         // id or prev.name that you want to save
         // in routes, edit routes to have app.put
-export const saveName = (name, oldName) => {
-    console.log("SAVE NAME ACTIONS", name);
+export const saveName = (newName, oldName) => {
+    console.log("SAVE NAME ACTIONS", newName);
     return async (dispatch, getState) => {
-       let promise = fetch("http://localhost:3001/api/saveName", {
-           method: "PUT",
-           headers: {
-            'Content-Type': 'application/json',
-           },
-           body: JSON.stringify({
-               editedName: name,
-               name: oldName
+        let promise = fetch("http://localhost:3001/api/updateName", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                newName: newName,
+                oldName: oldName
             })
-       });
-       let response = await promise;
-       let trainer = await response.json();
+        });
+        await promise;
 
-       dispatch ({
-           type: "SAVE NAME",
-           name:  trainer
-       })
+        dispatch ({
+            type: "SAVE NAME",
+            oldName: oldName,
+            newName: newName
+        });
+
+        // make axios post to db to save name changes
     }
 }
 

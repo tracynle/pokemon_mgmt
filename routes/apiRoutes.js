@@ -19,7 +19,8 @@ module.exports = function(app) {
   app.post("/api/trainer", function(req, res) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Content-Type");
-    console.log("REQQQQQ", req.body);
+    console.log("TRAINER NAME", req.body);
+    
     if (!req.body.name) {
       res.json({});
       return;
@@ -33,27 +34,40 @@ module.exports = function(app) {
     });
   });
 
+
   // PUT (UPDATE) trainer's name > changed in db
-  app.put("api/saveName", function(req, res) {
+  app.post("/api/updateName", function(req, res) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Content-Type");
-    console.log("REQQQQQ", req.body);
-    if (!req.body.name) {
+    console.log("UPDATE OLDNAME", req.body.oldName);
+    console.log("UPDATE NEWNAME", req.body.newName);
+    console.log("UPDATE NAME", req.body);
+
+    if (!req.body.oldName || !req.body.newName) {
       res.json({});
       return;
     }
-    db.Trainer.update({
-      name: req.body.name
-    }).then(function(dbTrainer){
-      console.log("***** SAVED trainer name ***** : ", dbTrainer.dataValues);
-      res.json(dbTrainer);
-    }) 
 
     
+    db.Trainer.update({
+      name: req.body.newName
+    }, 
+    {
+      where: {name: req.body.oldName}
+    }).then(function(dbTrainer){
+      res.json(dbTrainer);
+    });
   })
 
   // ALLOW preflight requests from the browser (where method type is OPTIONS)
   app.options("/api/trainer", function(req, res, next) {
+    res.header("Access-Control-Allow-Headers", "Content-Type");
+    res.header("Access-Control-Allow-Origin", "*");
+    next(req, res);
+  });
+
+  // ALLOW preflight requests from the browser (where method type is OPTIONS)
+  app.options("/api/blahblahaaa", function(req, res, next) {
     res.header("Access-Control-Allow-Headers", "Content-Type");
     res.header("Access-Control-Allow-Origin", "*");
     next(req, res);

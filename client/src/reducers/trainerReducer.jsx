@@ -43,7 +43,20 @@ const trainerReducer = (state = initialState, action) => {
         
         case "SAVE NAME":
             console.log("Save trainer name reducer", action.name)
-            trainersCopy = {...state.trainers}
+            trainersCopy = {...state.trainers};
+
+            // save copy of trainer so we don't lose it when using delete
+            let oldTrainerInfo = trainersCopy[action.oldName];
+            // updating "name" key in trainer map
+            oldTrainerInfo.name = action.newName;
+
+            // delete key-value pair, where the key was the old name
+            delete trainersCopy[action.oldName];
+            // restore the trainer backed up in "oldTrainer" to new key that is the new name
+            trainersCopy[action.newName] = oldTrainerInfo;
+
+            newState = Object.assign({}, state, {trainers: trainersCopy} )
+
             return newState;
 
         case "TRAINER DELETED": 
