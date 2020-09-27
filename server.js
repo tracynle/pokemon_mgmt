@@ -8,7 +8,7 @@ const cors = require("cors");
 
 const db = require("./models");
 const NODEPORT  =  3001;
-
+console.log(`process.env.NODE_ENV ==>> ${process.env.NODE_ENV}`);
 console.log("PORT" + process.env.PORT);
 // Configure middleware
 // Set up express to use this port
