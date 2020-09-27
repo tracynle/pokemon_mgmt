@@ -20,9 +20,21 @@ app.use(bodyparser.json());
 
 // Routes
 require("./routes/apiRoutes")(app);
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static("client/build"));
+}
+
+// ... other app.use middleware 
+app.use(express.static(path.join(__dirname, "client", "build")))
+
 
 // Configure express to use public folder
 app.use(express.static(path.join(__dirname, "public")));
+
+// Right before your app.listen(), add this:
+app.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
+});
 
 // If false, table won't be dropped everytime you start the server. 
 // Otherwise it would.
