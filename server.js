@@ -12,7 +12,8 @@ console.log(`process.env.NODE_ENV ==>> ${process.env.NODE_ENV}`);
 console.log("PORT" + process.env.PORT);
 // Configure middleware
 // Set up express to use this port
-app.set("port", process.env.PORT || NODEPORT);
+const PORT = process.env.PORT || NODEPORT;
+app.set("port", PORT);
 app.use(cors());
 app.use(bodyparser.urlencoded({ extended: true}));
 app.use(bodyparser.json());
@@ -30,11 +31,11 @@ var syncOptions = { force: false};
 
 // Starting the server, syncing our models-----/
 db.sequelize.sync(syncOptions).then(function() {
-    app.listen(NODEPORT, function() {
+    app.listen(PORT, function() {
       console.log(
         "==> 🌎  Listening on port %s. Visit http://localhost:%s/ in your browser.",
-        NODEPORT,
-        NODEPORT
+        PORT,
+        PORT
       );
     });
   });
