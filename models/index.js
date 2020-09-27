@@ -11,9 +11,9 @@ let sequelize;
 
 console.log(env);
 console.log(config);
-if (config.use_env_variable) {
+if (process.env.JAWSDB_URL) {
     console.log('YYYY');
-  sequelize = new Sequelize(process.env[config.use_env_variable]);
+  sequelize = new Sequelize(process.env.JAWSDB_URL);
 } else {
     console.log('Connecting to DB');
   sequelize = new Sequelize(
