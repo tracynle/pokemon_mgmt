@@ -9,9 +9,13 @@ const db = {};
 
 let sequelize;
 
+console.log(env);
+console.log(config);
 if (config.use_env_variable) {
+    console.log('YYYY');
   sequelize = new Sequelize(process.env[config.use_env_variable]);
 } else {
+    console.log('Connecting to DB');
   sequelize = new Sequelize(
     config.database,
     config.username,
