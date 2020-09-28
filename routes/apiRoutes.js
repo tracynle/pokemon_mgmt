@@ -10,15 +10,15 @@ module.exports = function(app) {
     let trainers = await promise; 
     // return the results in the response
     console.log("zzzz", trainers);
-    res.header("Access-Control-Allow-Origin", "*");
+    //res.header("Access-Control-Allow-Origin", "*");
     res.json(trainers); 
   });
 
   //CREATE new trainer > Add to db (CREATE)
   // Works but info is undefined
   app.post("/api/trainer", function(req, res) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Content-Type");
+    //res.header("Access-Control-Allow-Origin", "*");
+    //res.header("Access-Control-Allow-Headers", "Content-Type");
     console.log("TRAINER NAME", req.body);
     
     if (!req.body.name) {
@@ -37,8 +37,8 @@ module.exports = function(app) {
 
   // PUT (UPDATE) trainer's name > changed in db
   app.post("/api/updateName", function(req, res) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Content-Type");
+    //res.header("Access-Control-Allow-Origin", "*");
+    //res.header("Access-Control-Allow-Headers", "Content-Type");
     console.log("UPDATE OLDNAME", req.body.oldName);
     console.log("UPDATE NEWNAME", req.body.newName);
     console.log("UPDATE NAME", req.body);
@@ -61,23 +61,23 @@ module.exports = function(app) {
 
   // ALLOW preflight requests from the browser (where method type is OPTIONS)
   app.options("/api/trainer", function(req, res, next) {
-    res.header("Access-Control-Allow-Headers", "Content-Type");
-    res.header("Access-Control-Allow-Origin", "*");
+    //res.header("Access-Control-Allow-Headers", "Content-Type");
+    //res.header("Access-Control-Allow-Origin", "*");
     next(req, res);
   });
 
   // ALLOW preflight requests from the browser (where method type is OPTIONS)
   app.options("/api/blahblahaaa", function(req, res, next) {
-    res.header("Access-Control-Allow-Headers", "Content-Type");
-    res.header("Access-Control-Allow-Origin", "*");
+    //res.header("Access-Control-Allow-Headers", "Content-Type");
+    //res.header("Access-Control-Allow-Origin", "*");
     next(req, res);
   });
 
   // DELETE TRAINER
   app.post("/api/deletetrainer", function(req, res) {
-    res.header("Access-Control-Allow-Origin", "*");
+    //res.header("Access-Control-Allow-Origin", "*");
     // res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    // res.header("Access-Control-Allow-Headers", "content-type");
+    //// res.header("Access-Control-Allow-Headers", "content-type");
     console.log("===== Trainer ID DELETING =====", req.query.name);
     db.Trainer.destroy({
       where: {
@@ -91,7 +91,7 @@ module.exports = function(app) {
   // -------------- Pokemon Routes --------------------
   // DELETE POKEMON
   app.post("/api/deletepokemon", async function(req, res) {
-    res.header("Access-Control-Allow-Origin", "*");
+    //res.header("Access-Control-Allow-Origin", "*");
     console.log("===== POKEMON ID DELETING =====", req.query.id);
     db.Pokemon.destroy({
       where: {
@@ -133,7 +133,7 @@ module.exports = function(app) {
   // GET all Pokemon (READ) from the Trainer
   app.get("/api/:trainer/pokemons", async function(req, res) {
     console.log("Get Request for Trainer:", req.params.trainer);
-    res.header("Access-Control-Allow-Origin", "*");
+    //res.header("Access-Control-Allow-Origin", "*");
     // find one trainer by name
     // after the promise has been fulfilled and retrieved results, 
     // write a callback function so sequelize will give you the result (use .then...)
@@ -165,8 +165,8 @@ module.exports = function(app) {
 
   // CREATE new Pokemon for Trainer
   app.post("/api/pokemon/", function(req, res) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Content-Type");
+    //res.header("Access-Control-Allow-Origin", "*");
+    //res.header("Access-Control-Allow-Headers", "Content-Type");
     //db.tableName.create(req.body).then(function(dbName) {});
     db.Pokemon.create(req.body).then(function(newPokemon) {
 
@@ -302,7 +302,7 @@ module.exports = function(app) {
   app.get("/api/search", async function(req, res) {
     console.log("Search term: ", req.query.q);
     console.log("CHECKEDDDDD", req.query.checked);
-    res.header("Access-Control-Allow-Origin", "*");
+    // res.header("Access-Control-Allow-Origin", "*");
 
     // if user clicks either radio button, do search by category
     if (req.query.checked == "trainer") {
