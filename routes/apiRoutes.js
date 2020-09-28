@@ -220,17 +220,21 @@ module.exports = function(app) {
       }
     });
 
+    console.log("AAAAA");
     let trainers = await promise; 
     // stored in an array otherwise the iteration for pokemons and trainers will be lost
     let pokemonAndTrainers = [];
 
     // loop through trainers array to find their pokemon
     for (let i= 0; i < trainers.length; i++) {
+        console.log("AAAAA " + i);
       let trainer = trainers[i];
+      console.log("AAAAA trainer: " + trainer);
       let pokemonList = trainer.pokemon_owned;
-      
+      console.log("AAAAA pokemonList: " + pokemonList);
 
       if (pokemonList) {
+        console.log("AAAAA went into if");
         let pokemonsPromise = db.Pokemon.findAll({
           where: {
             ID: pokemonList.split(",")       

@@ -2,6 +2,16 @@ require("dotenv").config();
 const Sequelize = require("sequelize");
 
 module.exports = {
+  production: {
+    dialect: "mysql",
+    define: {
+        freezeTableName: true,
+        timestamps: false
+    },
+    operatorsAliases: {
+      $like: Sequelize.Op.like
+    }
+  },
   development: {
     username: process.env.MYSQL_USER,
     password: process.env.MYSQL_PASS,
