@@ -9,7 +9,7 @@ export const getTrainersAction = () => {
     return async (dispatch, getState) => {
 
         // asynchronously fetch trainers
-        let fetchPromise = fetch("http://localhost:3001/api/trainers");
+        let fetchPromise = fetch("/api/trainers");
         let response = await fetchPromise;
         let trainers = await response.json(); // trainers is an array
         console.log("Response from fetching trainers:", trainers);
@@ -22,7 +22,7 @@ export const getTrainersAction = () => {
         // Then put pokemons in the "pokemons" key.
         for (let i = 0; i < trainers.length; i++) {
             let trainer = trainers[i];
-            fetchPromise = fetch(`http://localhost:3001/api/${trainer.name}/pokemons`);
+            fetchPromise = fetch(`/api/${trainer.name}/pokemons`);
             response = await fetchPromise;
             let pokemons = await response.json();
             trainer.pokemons = pokemons;
@@ -40,7 +40,7 @@ export const addTrainer = (data) => {
     console.log("DATAAAA", data);
     return async (dispatch, getState) => {
         // create a trainer/add
-        let promise = fetch("http://localhost:3001/api/trainer", {
+        let promise = fetch("/api/trainer", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ export const addTrainer = (data) => {
 export const saveName = (newName, oldName) => {
     console.log("SAVE NAME ACTIONS", newName);
     return async (dispatch, getState) => {
-        let promise = fetch("http://localhost:3001/api/updateName", {
+        let promise = fetch("/api/updateName", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ export const saveName = (newName, oldName) => {
 
 export const getDeleteTrainerAction = (name) => {
     return async (dispatch, getState) => { // returns an action function
-        let promise = fetch("http://localhost:3001/api/deletetrainer/?name=" + name, {
+        let promise = fetch("/api/deletetrainer/?name=" + name, {
             method: "POST", // could be "delete" too
         });
         await promise; // we're assuming no errors
@@ -121,7 +121,7 @@ export const getAddPokemonAction = (data, trainerName) => {
     console.log("ADDINGGGGG", data);
 
     return async(dispatch, getState) => {
-        let promise = fetch("http://localhost:3001/api/pokemon?trainerName=" + trainerName, {
+        let promise = fetch("/api/pokemon?trainerName=" + trainerName, {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -144,7 +144,7 @@ export const getDeletePokemonAction = (id, trainerName) => {
     return async (dispatch, getState) => {
 
         // get trainer by name and pokemon by id
-        let promise = fetch("http://localhost:3001/api/deletepokemon?trainerName=" + trainerName + "&id=" + id, {
+        let promise = fetch("/api/deletepokemon?trainerName=" + trainerName + "&id=" + id, {
             method: "POST", // could be "delete" too
         });
         await promise; // we're assuming no errors
@@ -160,7 +160,7 @@ export const getSearchAction = (searchTerms, checkedSearch) => {
     console.log("SEARCHINGGGGG", searchTerms);
 
     return async (dispatch, getState) => {
-        let promise = fetch("http://localhost:3001/api/search?checked=" + checkedSearch + "&q=" + searchTerms, {
+        let promise = fetch("/api/search?checked=" + checkedSearch + "&q=" + searchTerms, {
             method: "GET",
         });
         let response = await promise;
